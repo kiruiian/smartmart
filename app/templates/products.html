@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Products | SmartMart{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">🛍️ Products</h2>
+
+<div class="row">
+
+{% for product in products %}
+
+<div class="col-md-4 mb-4">
+
+    <div class="card shadow-sm h-100">
+
+        <div class="card-body text-center">
+
+            <h1>{{ product.emoji }}</h1>
+
+            <h5>{{ product.name }}</h5>
+
+            <h4 class="text-success">
+                KSh {{ product.price }}
+            </h4>
+
+            <button class="btn btn-success w-100">
+                Add to Cart
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}
