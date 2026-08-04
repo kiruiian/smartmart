@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2>🛠 Admin Dashboard</h2>
+
+    <hr>
+
+    <a href="{{ url_for('admin.add_product') }}"
+       class="btn btn-success">
+        ➕ Add Product
+    </a>
+
+    <a href="{{ url_for('admin.products') }}"
+       class="btn btn-primary">
+        📦 View Products
+    </a>
+
+</div>
+
+{% endblock %}
