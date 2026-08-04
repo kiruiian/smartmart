@@ -1,45 +1,46 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
     <div class="container">
 
-        <a class="navbar-brand fw-bold" href="/">
+        <a class="navbar-brand" href="{{ url_for('main.home') }}">
             🛒 SmartMart
         </a>
 
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbar">
+        <div class="ms-auto">
 
-            <span class="navbar-toggler-icon"></span>
+            {% if current_user.is_authenticated %}
 
-        </button>
+                <span class="text-white me-3">
+                    Welcome, {{ current_user.full_name }}
+                </span>
 
-        <div class="collapse navbar-collapse" id="navbar">
+                <a class="btn btn-light me-2"
+                   href="{{ url_for('main.dashboard') }}">
+                    Dashboard
+                </a>
 
-            <ul class="navbar-nav ms-auto">
+                <a class="btn btn-warning me-2"
+                   href="{{ url_for('main.products') }}">
+                    Products
+                </a>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
+                <a class="btn btn-danger"
+                   href="{{ url_for('auth.logout') }}">
+                    Logout
+                </a>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/products">Products</a>
-                </li>
+            {% else %}
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Categories</a>
-                </li>
+                <a class="btn btn-light me-2"
+                   href="{{ url_for('auth.login') }}">
+                    Login
+                </a>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Login</a>
-                </li>
+                <a class="btn btn-warning"
+                   href="{{ url_for('auth.register') }}">
+                    Register
+                </a>
 
-                <li class="nav-item">
-                    <a class="btn btn-warning ms-2" href="#">
-                        Register
-                    </a>
-                </li>
-
-            </ul>
+            {% endif %}
 
         </div>
 

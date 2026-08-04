@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2>Welcome, {{ user.full_name }} 👋</h2>
+
+    <hr>
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <h4>🛍</h4>
+                <h5>Products</h5>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <h4>🛒</h4>
+                <h5>Cart</h5>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <h4>📦</h4>
+                <h5>Orders</h5>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 text-center">
+                <h4>❤️</h4>
+                <h5>Wishlist</h5>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ url_for('main.products') }}" class="btn btn-success">
+            Browse Products
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}
