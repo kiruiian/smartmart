@@ -41,3 +41,33 @@ def add_product():
         return redirect(url_for("admin.products"))
 
     return render_template("admin/add_product.html")
+
+@admin_bp.route("/products/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_product(id):
+    product = Product.query.get_or_404(id)
+
+    if request.method == "POST":
+        product.name = request.form.get("name")
+        product.description = request.form.get("description")
+        product.category = request.form.get("category")
+        product.price = float(request.form.get("price"))
+        product.stock = int(request.form.get("stock"))
+
+        db.session.commit()
+
+        flash("Product updated successfully!", "success")
+        return redirect(url_for("admin.products"))
+
+    return render_template("admin/edit_product.html", product=product)
+
+@admin_bp.route("/products/delete/<int:id>", methods=["POST"])
+@login_required
+def delete_product(id):
+    product = Product.query.get_or_404(id)
+
+    db.session.delete(product)
+    db.session.commit()
+
+    flash(f"{product.name} deleted successfully!", "success")
+    return redirect(url_for("admin.products"))
