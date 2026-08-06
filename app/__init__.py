@@ -23,11 +23,12 @@ def create_app():
     from .routes import main_bp
     from .auth import auth_bp
     from .admin import admin_bp
+    from .customer import customer_bp
 
     # Register blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(admin_bp)
-
+    app.register_blueprint(customer_bp)
     
     return app

@@ -11,6 +11,14 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+
+    cart = db.relationship(
+        "Cart",
+        backref="user",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -38,6 +46,40 @@ class Product(db.Model):
     image = db.Column(db.String(255), default="default.jpg")
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    cart_items = db.relationship(
+    "CartItem",
+    backref="product_info",
+    lazy=True
+)
 
     def __repr__(self):
         return f"<Product {self.name}>"
+
+class Cart(db.Model):
+    __tablename__ = "cart"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    items = db.relationship(
+        "CartItem",
+        backref="cart",
+        lazy=True,
+        cascade="all, delete-orphan"
+    )
+
+class CartItem(db.Model):
+    __tablename__ = "cart_item"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    cart_id = db.Column(db.Integer, db.ForeignKey("cart.id"), nullable=False)
+
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
+
+    quantity = db.Column(db.Integer, default=1)
+
+    product = db.relationship("Product")

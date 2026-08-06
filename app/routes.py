@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
+from app.models import Product
 
 main_bp = Blueprint("main", __name__)
 
@@ -32,40 +33,9 @@ def dashboard():
 @login_required
 def products():
 
-    sample_products = [
-        {
-            "name": "Brookside Milk 500ml",
-            "price": 120,
-            "emoji": "🥛"
-        },
-        {
-            "name": "Bread",
-            "price": 75,
-            "emoji": "🍞"
-        },
-        {
-            "name": "Apples (1kg)",
-            "price": 250,
-            "emoji": "🍎"
-        },
-        {
-            "name": "Rice 2kg",
-            "price": 420,
-            "emoji": "🍚"
-        },
-        {
-            "name": "Coca-Cola 2L",
-            "price": 180,
-            "emoji": "🥤"
-        },
-        {
-            "name": "Omo Washing Powder",
-            "price": 350,
-            "emoji": "🧼"
-        },
-    ]
+    products = Product.query.order_by(Product.id.desc()).all()
 
     return render_template(
         "products.html",
-        products=sample_products
+        products=products
     )
