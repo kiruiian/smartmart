@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Order Successful | SmartMart{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow-sm border-0 text-center">
+
+                <div class="card-body p-5">
+
+                    <!-- Success Icon -->
+                    <div class="mb-4">
+                        <div
+                            class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                            style="width: 90px; height: 90px; font-size: 45px;"
+                        >
+                            ✓
+                        </div>
+                    </div>
+
+                    <!-- Heading -->
+                    <h1 class="text-success mb-3">
+                        Order Placed Successfully!
+                    </h1>
+
+                    <p class="lead">
+                        Thank you for shopping with SmartMart.
+                    </p>
+
+                    <p class="text-muted">
+                        Your order has been received and is being processed.
+                    </p>
+
+                    <hr class="my-4">
+
+                    <!-- Order Information -->
+                    <div class="row text-start mb-4">
+
+                        <div class="col-md-6 mb-3">
+
+                            <strong>
+                                Order Number
+                            </strong>
+
+                            <br>
+
+                            <span class="text-muted">
+                                #{{ order.id }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <strong>
+                                Payment Method
+                            </strong>
+
+                            <br>
+
+                            <span class="text-muted">
+                                {{ order.payment_method|title }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <strong>
+                                Order Total
+                            </strong>
+
+                            <br>
+
+                            <span class="text-success fw-bold">
+                                KSh {{ "%.2f"|format(order.total_amount) }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <strong>
+                                Status
+                            </strong>
+
+                            <br>
+
+                            <span class="badge bg-warning text-dark">
+                                {{ order.status|title }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Delivery Location -->
+                    {% if order.delivery_address %}
+
+                    <div class="alert alert-light border text-start">
+
+                        <strong>
+                            📍 Delivery Address
+                        </strong>
+
+                        <br>
+
+                        <span class="text-muted">
+                            {{ order.delivery_address }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- Buttons -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+
+                        <a
+                            href="{{ url_for('main.products') }}"
+                            class="btn btn-success btn-lg"
+                        >
+                            🛍 Continue Shopping
+                        </a>
+
+                        <a
+                            href="{{ url_for('main.dashboard') }}"
+                            class="btn btn-outline-secondary btn-lg"
+                        >
+                            🏠 Dashboard
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,698 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | SmartMart{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">💳 Checkout</h2>
+
+    <div class="row">
+
+        <!-- CUSTOMER + DELIVERY INFORMATION -->
+
+        <div class="col-md-7">
+
+            <!-- Customer Information -->
+
+            <div class="card shadow-sm mb-4">
+
+                <div class="card-body">
+
+                    <h4 class="mb-3">
+                        👤 Customer Information
+                    </h4>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ current_user.full_name }}"
+                            readonly
+                        >
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-control"
+                            value="{{ current_user.email }}"
+                            readonly
+                        >
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Phone
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ current_user.phone }}"
+                            readonly
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DELIVERY LOCATION -->
+
+            <div class="card shadow-sm mb-4">
+
+                <div class="card-body">
+
+                    <h4 class="mb-3">
+                        📍 Delivery Location
+                    </h4>
+
+                    <!-- Search -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="location-search"
+                            class="form-label"
+                        >
+                            Search for your location
+                        </label>
+
+                        <input
+                            type="text"
+                            id="location-search"
+                            class="form-control"
+                            placeholder="e.g. Kericho, Kenya"
+                        >
+
+                        <small class="text-muted">
+                            Type a location and press Enter,
+                            or click directly on the map.
+                        </small>
+
+                    </div>
+
+
+                    <!-- MAP -->
+
+                    <div
+                        id="map"
+                        style="
+                            height: 400px;
+                            width: 100%;
+                            border-radius: 10px;
+                            margin-bottom: 20px;
+                        "
+                    ></div>
+
+
+                    <!-- Delivery Address -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="delivery_address"
+                            class="form-label"
+                        >
+                            Delivery Address
+                        </label>
+
+                        <textarea
+                            name="delivery_address"
+                            id="delivery_address"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Select a location on the map..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- Coordinates -->
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label
+                                for="latitude"
+                                class="form-label"
+                            >
+                                Latitude
+                            </label>
+
+                            <input
+                                type="text"
+                                name="latitude"
+                                id="latitude"
+                                class="form-control"
+                                readonly
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label
+                                for="longitude"
+                                class="form-label"
+                            >
+                                Longitude
+                            </label>
+
+                            <input
+                                type="text"
+                                name="longitude"
+                                id="longitude"
+                                class="form-control"
+                                readonly
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h4 class="mb-3">
+                        💰 Payment Method
+                    </h4>
+
+                    <form method="POST">
+
+                        <!-- Hidden location fields -->
+
+                        <input
+                            type="hidden"
+                            name="delivery_address"
+                            id="form_delivery_address"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="latitude"
+                            id="form_latitude"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="longitude"
+                            id="form_longitude"
+                        >
+
+
+                        <!-- M-Pesa -->
+
+                        <div class="form-check mb-3">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="payment_method"
+                                value="mpesa"
+                                id="mpesa"
+                                required
+                            >
+
+                            <label
+                                class="form-check-label"
+                                for="mpesa"
+                            >
+                                📱 M-Pesa
+                            </label>
+
+                        </div>
+
+
+                        <!-- Cash -->
+
+                        <div class="form-check mb-3">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="payment_method"
+                                value="cash"
+                                id="cash"
+                            >
+
+                            <label
+                                class="form-check-label"
+                                for="cash"
+                            >
+                                💵 Cash on Delivery
+                            </label>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-success btn-lg w-100 mt-3"
+                        >
+                            🛒 Place Order
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ORDER SUMMARY -->
+
+        <div class="col-md-5">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h4 class="mb-4">
+                        🧾 Order Summary
+                    </h4>
+
+                    {% for item in cart_items %}
+
+                    <div
+                        class="d-flex justify-content-between align-items-center mb-3"
+                    >
+
+                        <div>
+
+                            <strong>
+                                {{ item.product.name }}
+                            </strong>
+
+                            <br>
+
+                            <small class="text-muted">
+                                Quantity: {{ item.quantity }}
+                            </small>
+
+                        </div>
+
+                        <span>
+
+                            KSh
+                            {{ "%.2f"|format(
+                                item.product.price * item.quantity
+                            ) }}
+
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+
+                        <strong>
+                            Total
+                        </strong>
+
+                        <strong class="text-success fs-4">
+
+                            KSh
+                            {{ "%.2f"|format(total) }}
+
+                        </strong>
+
+                    </div>
+
+                    <a
+                        href="{{ url_for('customer.view_cart') }}"
+                        class="btn btn-outline-secondary w-100 mt-4"
+                    >
+                        ← Back to Cart
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+<!-- ========================================= -->
+<!-- LEAFLET MAP -->
+<!-- ========================================= -->
+
+{% block scripts %}
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script>
+
+    // =========================================
+    // DEFAULT MAP LOCATION - KENYA
+    // =========================================
+
+    const defaultLatitude = -0.0236;
+    const defaultLongitude = 37.9062;
+
+
+    // =========================================
+    // CREATE MAP
+    // =========================================
+
+    const map = L.map("map").setView(
+        [
+            defaultLatitude,
+            defaultLongitude
+        ],
+        7
+    );
+
+
+    // =========================================
+    // OPEN STREET MAP
+    // =========================================
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+
+    // =========================================
+    // MARKER
+    // =========================================
+
+    let marker = null;
+
+
+    // =========================================
+    // SELECT LOCATION
+    // =========================================
+
+    function selectLocation(latitude, longitude) {
+
+        // Remove previous marker
+
+        if (marker) {
+
+            map.removeLayer(marker);
+
+        }
+
+
+        // Create new marker
+
+        marker = L.marker(
+            [
+                latitude,
+                longitude
+            ]
+        ).addTo(map);
+
+
+        // Latitude
+
+        document.getElementById(
+            "latitude"
+        ).value = latitude.toFixed(6);
+
+
+        // Longitude
+
+        document.getElementById(
+            "longitude"
+        ).value = longitude.toFixed(6);
+
+
+        // Hidden latitude
+
+        document.getElementById(
+            "form_latitude"
+        ).value = latitude.toFixed(6);
+
+
+        // Hidden longitude
+
+        document.getElementById(
+            "form_longitude"
+        ).value = longitude.toFixed(6);
+
+
+        // Center map
+
+        map.setView(
+            [
+                latitude,
+                longitude
+            ],
+            15
+        );
+
+
+        // =====================================
+        // REVERSE GEOCODING
+        // =====================================
+
+        fetch(
+            "https://nominatim.openstreetmap.org/reverse"
+            + "?format=json"
+            + "&lat=" + latitude
+            + "&lon=" + longitude
+        )
+
+        .then(function(response) {
+
+            return response.json();
+
+        })
+
+        .then(function(data) {
+
+            if (data.display_name) {
+
+                document.getElementById(
+                    "delivery_address"
+                ).value = data.display_name;
+
+
+                document.getElementById(
+                    "form_delivery_address"
+                ).value = data.display_name;
+
+            }
+
+        })
+
+        .catch(function(error) {
+
+            console.error(
+                "Address lookup error:",
+                error
+            );
+
+        });
+
+    }
+
+
+    // =========================================
+    // CLICK MAP
+    // =========================================
+
+    map.on(
+        "click",
+        function(event) {
+
+            selectLocation(
+                event.latlng.lat,
+                event.latlng.lng
+            );
+
+        }
+    );
+
+
+    // =========================================
+    // SEARCH LOCATION
+    // =========================================
+
+    document.getElementById(
+        "location-search"
+    ).addEventListener(
+        "keydown",
+        function(event) {
+
+            // Search only when Enter is pressed
+
+            if (event.key !== "Enter") {
+
+                return;
+
+            }
+
+
+            event.preventDefault();
+
+
+            const query =
+                this.value.trim();
+
+
+            if (!query) {
+
+                return;
+
+            }
+
+
+            console.log(
+                "Searching for:",
+                query
+            );
+
+
+            fetch(
+                "https://nominatim.openstreetmap.org/search"
+                + "?format=json"
+                + "&q="
+                + encodeURIComponent(query)
+                + "&limit=1"
+            )
+
+            .then(function(response) {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Search failed: HTTP "
+                        + response.status
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(function(data) {
+
+                console.log(
+                    "Search result:",
+                    data
+                );
+
+
+                if (
+                    !data ||
+                    data.length === 0
+                ) {
+
+                    alert(
+                        "Location not found. Try another search."
+                    );
+
+                    return;
+
+                }
+
+
+                const latitude =
+                    parseFloat(data[0].lat);
+
+
+                const longitude =
+                    parseFloat(data[0].lon);
+
+
+                selectLocation(
+                    latitude,
+                    longitude
+                );
+
+            })
+
+            .catch(function(error) {
+
+                console.error(
+                    "Location search error:",
+                    error
+                );
+
+                alert(
+                    "Unable to search for this location."
+                );
+
+            });
+
+        }
+    );
+
+
+    // =========================================
+    // MANUAL ADDRESS EDIT
+    // =========================================
+
+    document.getElementById(
+        "delivery_address"
+    ).addEventListener(
+        "input",
+        function() {
+
+            document.getElementById(
+                "form_delivery_address"
+            ).value = this.value;
+
+        }
+    );
+
+</script>
+
+{% endblock %}

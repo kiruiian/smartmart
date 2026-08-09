@@ -1,28 +1,36 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
 
     <div class="container">
 
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="{{ url_for('main.home') }}">
+        <!-- SmartMart Logo -->
+        <a class="navbar-brand fw-bold"
+           href="{{ url_for('main.home') }}">
             🛒 SmartMart
         </a>
 
-        <!-- Mobile Toggle -->
+
+        <!-- Mobile Menu Button -->
         <button class="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
 
             <span class="navbar-toggler-icon"></span>
 
         </button>
 
+
         <div class="collapse navbar-collapse" id="navbarNav">
 
             {% if current_user.is_authenticated %}
 
-                <ul class="navbar-nav me-auto">
+                <!-- Navigation Links -->
+                <ul class="navbar-nav me-auto align-items-lg-center">
 
+                    <!-- Dashboard -->
                     <li class="nav-item">
                         <a class="nav-link"
                            href="{{ url_for('main.dashboard') }}">
@@ -30,6 +38,8 @@
                         </a>
                     </li>
 
+
+                    <!-- Products -->
                     <li class="nav-item">
                         <a class="nav-link"
                            href="{{ url_for('main.products') }}">
@@ -37,16 +47,47 @@
                         </a>
                     </li>
 
+
+                    <!-- My Orders -->
                     <li class="nav-item">
                         <a class="nav-link"
-                           href="{{ url_for('customer.view_cart') }}">
-                            🛒 My Cart
+                           href="{{ url_for('customer.my_orders') }}">
+                            📦 My Orders
                         </a>
+                    </li>
+
+
+                    <!-- Cart -->
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="{{ url_for('customer.view_cart') }}">
+
+                            <span class="cart-icon">
+
+                                🛒
+
+                                {% if cart_count > 0 %}
+
+                                    <span class="cart-badge">
+                                        {{ cart_count }}
+                                    </span>
+
+                                {% endif %}
+
+                            </span>
+
+                            Cart
+
+                        </a>
+
                     </li>
 
                 </ul>
 
-                <div class="d-flex align-items-center">
+
+                <!-- User Section -->
+                <div class="d-flex align-items-center mt-2 mt-lg-0">
 
                     <span class="text-white me-3">
                         👋 {{ current_user.full_name }}
@@ -59,8 +100,10 @@
 
                 </div>
 
+
             {% else %}
 
+                <!-- Guest Navigation -->
                 <div class="ms-auto">
 
                     <a class="btn btn-light me-2"
@@ -82,3 +125,55 @@
     </div>
 
 </nav>
+
+
+<!-- Navbar Styling -->
+<style>
+
+    /* Cart icon container */
+    .cart-icon {
+        position: relative;
+        display: inline-block;
+        margin-right: 4px;
+    }
+
+
+    /* Cart quantity badge */
+    .cart-badge {
+        position: absolute;
+
+        top: -9px;
+        right: -9px;
+
+        min-width: 18px;
+        height: 18px;
+
+        padding: 1px 4px;
+
+        background-color: #dc3545;
+        color: white;
+
+        border: 2px solid white;
+        border-radius: 50%;
+
+        font-size: 9px;
+        font-weight: bold;
+
+        line-height: 13px;
+        text-align: center;
+
+        z-index: 10;
+    }
+
+
+    /* Navbar links */
+    .navbar .nav-link {
+        transition: opacity 0.2s ease;
+    }
+
+
+    .navbar .nav-link:hover {
+        opacity: 0.85;
+    }
+
+</style>
